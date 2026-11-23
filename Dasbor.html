@@ -1,0 +1,970 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHOUJI STORE - ADMIN</title>
+
+<style>
+:root{
+  --red:#ff2638;
+  --dark:#090a10;
+  --panel:#141620;
+  --border:#292c39;
+  --text:#fff;
+  --muted:#a4a7b5;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--dark);
+  color:var(--text);
+  font-family:Arial,sans-serif;
+}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.login{
+  position:fixed;
+  inset:0;
+  z-index:99;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#090a10;
+  padding:20px;
+}
+.login-box{
+  width:100%;
+  max-width:360px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:25px;
+  text-align:center;
+}
+.login-box h2{color:var(--red)}
+.login-box input{margin:15px 0}
+input,textarea,select{
+  width:100%;
+  padding:12px;
+  background:#0d0f17;
+  border:1px solid var(--border);
+  color:white;
+  border-radius:9px;
+  outline:none;
+}
+input:focus,textarea:focus,select:focus{
+  border-color:var(--red);
+}
+textarea{min-height:100px;resize:vertical}
+button{
+  border:0;
+  border-radius:9px;
+  padding:11px 15px;
+  color:white;
+  background:var(--red);
+  font-weight:bold;
+}
+button.secondary{background:#292c39}
+button.danger{background:#a71929}
+button.small{padding:7px 10px;font-size:12px}
+.app{display:none;min-height:100vh}
+.sidebar{
+  position:fixed;
+  top:0;bottom:0;left:0;
+  width:235px;
+  padding:22px 15px;
+  background:#10121b;
+  border-right:1px solid var(--border);
+  overflow-y:auto;
+}
+.brand{
+  font-size:21px;
+  font-weight:bold;
+  margin:5px 8px 25px;
+}
+.brand span{color:var(--red)}
+.nav-btn{
+  display:block;
+  width:100%;
+  text-align:left;
+  background:transparent;
+  color:#bbb;
+  margin:5px 0;
+  padding:13px;
+}
+.nav-btn.active,.nav-btn:hover{
+  background:#28141a;
+  color:white;
+}
+.main{
+  margin-left:235px;
+  padding:25px;
+  max-width:1400px;
+}
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:25px;
+}
+.topbar h1{font-size:23px;margin:0}
+.section{display:none}
+.section.active{display:block}
+.panel{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:18px;
+  margin-bottom:18px;
+}
+.panel h3{margin-top:0}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:13px;
+  margin-bottom:20px;
+}
+.stat{
+  background:var(--panel);
+  border:1px solid var(--border);
+  padding:18px;
+  border-radius:13px;
+}
+.stat small{color:var(--muted)}
+.stat strong{
+  display:block;
+  font-size:24px;
+  margin-top:10px;
+  color:var(--red);
+  overflow-wrap:anywhere;
+}
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:13px;
+}
+.field{margin-bottom:14px}
+.field label{
+  display:block;
+  color:#c7c8d0;
+  font-size:13px;
+  margin-bottom:7px;
+}
+.full{grid-column:1/-1}
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:12px;
+}
+.table-wrap{overflow-x:auto}
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:600px;
+}
+th,td{
+  text-align:left;
+  padding:12px 9px;
+  border-bottom:1px solid var(--border);
+  font-size:13px;
+}
+th{color:var(--red)}
+.product-thumb{
+  width:55px;
+  height:55px;
+  object-fit:cover;
+  border-radius:8px;
+}
+.muted{color:var(--muted);font-size:13px}
+.preview{
+  width:100%;
+  max-width:260px;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  background:#08090d;
+  border-radius:10px;
+  border:1px solid var(--border);
+  display:none;
+}
+.preview.landscape{aspect-ratio:16/9}
+.notice{
+  padding:12px;
+  border-radius:9px;
+  background:#21151a;
+  color:#ffb4bd;
+  font-size:13px;
+  margin-bottom:15px;
+}
+@media(max-width:750px){
+  .sidebar{
+    position:relative;
+    width:100%;
+    height:auto;
+    padding:12px;
+  }
+  .brand{margin:5px 8px 12px}
+  .sidebar nav{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:4px;
+  }
+  .nav-btn{margin:0;padding:10px;font-size:12px}
+  .main{margin:0;padding:15px}
+  .stats{grid-template-columns:1fr 1fr}
+  .form-grid{grid-template-columns:1fr}
+  .full{grid-column:auto}
+}
+</style>
+</head>
+
+<body>
+
+<div class="login" id="login">
+  <div class="login-box">
+    <h2>CHOUJI STORE</h2>
+    <p class="muted">ADMIN PANEL</p>
+    <input id="pinInput" type="password" placeholder="Masukkan PIN Admin">
+    <button style="width:100%" onclick="loginAdmin()">MASUK</button>
+    <p id="loginError" class="muted"></p>
+  </div>
+</div>
+
+<div class="app" id="app">
+
+  <aside class="sidebar">
+    <div class="brand">CHOUJI <span>STORE</span></div>
+    <nav>
+      <button class="nav-btn active" onclick="showSection('dashboard',this)">📊 Dashboard</button>
+      <button class="nav-btn" onclick="showSection('products',this)">📦 Produk</button>
+      <button class="nav-btn" onclick="showSection('home',this)">🏠 Pengaturan Home</button>
+      <button class="nav-btn" onclick="showSection('website',this)">🎨 Tampilan Website</button>
+      <button class="nav-btn" onclick="showSection('backup',this)">💾 Backup Data</button>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <h1 id="pageTitle">Dashboard</h1>
+      <button class="secondary small" onclick="window.open('index.html','_blank')">Lihat Website ↗</button>
+    </div>
+
+    <!-- DASHBOARD -->
+    <section class="section active" id="dashboard">
+      <div class="stats">
+        <div class="stat">
+          <small>Total Produk</small>
+          <strong id="totalProducts">0</strong>
+        </div>
+        <div class="stat">
+          <small>Total Stok</small>
+          <strong id="totalStock">0</strong>
+        </div>
+        <div class="stat">
+          <small>Nilai Stok</small>
+          <strong id="stockValue">Rp0</strong>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Selamat datang di Admin CHOUJI STORE</h3>
+        <p class="muted">Kelola produk, kategori, gambar, video beranda, informasi toko, dan backup data website.</p>
+      </div>
+    </section>
+
+    <!-- PRODUK -->
+    <section class="section" id="products">
+      <div class="panel">
+        <h3 id="formTitle">Tambah Produk</h3>
+
+        <input type="hidden" id="pId">
+
+        <div class="form-grid">
+          <div class="field">
+            <label>Nama Produk</label>
+            <input id="pName" placeholder="Contoh: Gmail Ready">
+          </div>
+
+          <div class="field">
+            <label>Kategori</label>
+            <select id="pCategory" onchange="updateImageRatio()">
+              <option value="">Pilih kategori</option>
+              <option value="nokos">Nokos</option>
+              <option value="sewa-bot">Sewa Bot</option>
+              <option value="premium">Premium</option>
+              <option value="akun-ml">Akun Mobile Legends</option>
+              <option value="akun-ff">Akun Free Fire</option>
+              <option value="lainnya">Lainnya</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Harga (Rp)</label>
+            <input id="pPrice" type="number" min="0" placeholder="5000">
+          </div>
+
+          <div class="field">
+            <label>Stok</label>
+            <input id="pStock" type="number" min="0" placeholder="10">
+          </div>
+
+          <div class="field full">
+            <label>Upload Gambar dari Galeri HP</label>
+            <input id="pFile" type="file" accept="image/*" onchange="previewUploadedImage(event)">
+            <p class="muted">Gambar akan otomatis diperkecil agar penyimpanan lebih ringan.</p>
+          </div>
+
+          <div class="field full">
+            <label>Atau URL Gambar (opsional)</label>
+            <input id="pImage" placeholder="https://contoh.com/gambar.jpg">
+          </div>
+
+          <div class="field full">
+            <img id="imagePreview" class="preview" alt="Preview gambar">
+          </div>
+
+          <div class="field full">
+            <label>Deskripsi Produk</label>
+            <textarea id="pDescription" placeholder="Tulis deskripsi produk..."></textarea>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button onclick="saveProduct()">Simpan Produk</button>
+          <button class="secondary" onclick="clearProductForm()">Bersihkan</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Daftar Produk</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Gambar</th>
+                <th>Produk</th>
+                <th>Kategori</th>
+                <th>Harga</th>
+                <th>Stok</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="productTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- PENGATURAN HOME -->
+    <section class="section" id="home">
+      <div class="panel">
+        <h3>Video Beranda</h3>
+        <div class="field">
+          <label>URL Video (MP4 / WebM / YouTube)</label>
+          <input id="homeVideo" placeholder="https://.../video.mp4">
+        </div>
+        <p class="muted">Masukkan link video langsung atau link YouTube. Video ditampilkan di halaman Home.</p>
+      </div>
+
+      <div class="panel">
+        <h3>Informasi Sambutan</h3>
+        <div class="field">
+          <label>Teks Sambutan</label>
+          <textarea id="homeWelcome" rows="15"></textarea>
+        </div>
+        <div class="field">
+          <label>Link Top Up Game & Voucher</label>
+          <input id="topupUrl">
+        </div>
+        <div class="field">
+          <label>Link TikTok</label>
+          <input id="tiktokUrl">
+        </div>
+        <div class="field">
+          <label>Link WhatsApp Owner</label>
+          <input id="sewaWhatsappUrl">
+        </div>
+        <div class="field">
+          <label>Link Saluran WhatsApp</label>
+          <input id="sewaChannelUrl">
+        </div>
+        <button onclick="saveHomeSettings()">Simpan Pengaturan Home</button>
+      </div>
+    </section>
+
+    <!-- TAMPILAN WEBSITE -->
+    <section class="section" id="website">
+      <div class="panel">
+        <h3>Identitas Toko</h3>
+        <div class="field">
+          <label>Nama Toko</label>
+          <input id="storeName">
+        </div>
+        <div class="field">
+          <label>Logo URL</label>
+          <input id="logoUrl">
+        </div>
+        <div class="field">
+          <label>Nomor WhatsApp Owner</label>
+          <input id="whatsapp">
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Teks Website</h3>
+        <div class="field">
+          <label>Judul Utama</label>
+          <input id="heading">
+        </div>
+        <div class="field">
+          <label>Subjudul</label>
+          <input id="subtitle">
+        </div>
+        <div class="field">
+          <label>Judul Katalog</label>
+          <input id="sectionTitle">
+        </div>
+        <div class="field">
+          <label>Deskripsi Katalog</label>
+          <input id="sectionDesc">
+        </div>
+        <div class="field">
+          <label>Judul Promo</label>
+          <input id="promoTitle">
+        </div>
+        <div class="field">
+          <label>Deskripsi Promo</label>
+          <textarea id="promoText"></textarea>
+        </div>
+        <div class="field">
+          <label>Teks Footer</label>
+          <input id="footer">
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Warna Website</h3>
+        <div class="form-grid">
+          <div class="field">
+            <label>Warna Utama</label>
+            <input id="primary" type="color">
+          </div>
+          <div class="field">
+            <label>Warna Sekunder</label>
+            <input id="secondary" type="color">
+          </div>
+          <div class="field">
+            <label>Background</label>
+            <input id="background" type="color">
+          </div>
+          <div class="field">
+            <label>Panel</label>
+            <input id="panelColor" type="color">
+          </div>
+          <div class="field">
+            <label>Warna Teks</label>
+            <input id="textColor" type="color">
+          </div>
+          <div class="field">
+            <label>Warna Border</label>
+            <input id="borderColor" type="color">
+          </div>
+        </div>
+        <button onclick="saveWebsiteSettings()">Simpan Tampilan Website</button>
+      </div>
+    </section>
+
+    <!-- BACKUP -->
+    <section class="section" id="backup">
+      <div class="panel">
+        <h3>Backup Data Website</h3>
+        <p class="muted">Simpan produk dan pengaturan website ke file JSON. Gunakan file tersebut untuk memulihkan data.</p>
+        <div class="actions">
+          <button onclick="backupData()">Download Backup</button>
+          <button class="secondary" onclick="document.getElementById('restoreFile').click()">Pulihkan Backup</button>
+          <input id="restoreFile" type="file" accept=".json,application/json" style="display:none" onchange="restoreData(event)">
+        </div>
+      </div>
+      <div class="notice">
+        Data website tersimpan di browser. Gunakan backup secara berkala dan jangan hapus data browser sebelum membuat cadangan.
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+const ADMIN_PIN = "080813";
+const PRODUCT_KEY = "chouji_produk";
+const SETTINGS_KEY = "chouji_settings";
+
+const DEFAULT_WELCOME = `✨ Selamat datang di saluran Chouji Store ✨
+
+• Gmail ✅
+• Nokos ✅
+• Top Up Game & Voucher ✅
+• Sewa bot WhatsApp ✅
+• Alight Motion Premium ✅
+___________________
+
+> Link top up game & Voucher : https://choujistore.my.id/
+> Link akun tiktok : https://www.tiktok.com/@duke_chouji?_r=1&_t=ZS-9B5uow7TVmm
+
+___________________
+
+> Sewa bot harga murah
+• VIPS | 6RB 7HR
+• VIPS | 12RB 14HR
+• VIPS | 18RB 21HR
+• VIP | 8RB 30HR
+• MINI | 5RB 30HR
+
+> Yang mau sewa bot, beli nokos, gmail DM nomor ini:
+https://wa.me/6283194629621?text=Halo%2C%20saya%20ingin%20sewa%20bot%20WhatsApp
+
+Saluran sewa bot:
+https://whatsapp.com/channel/0029Vb93Imb8kyyVk2OE5n0M
+
+Terimakasih yang sudah mampir, dan jangan lupa ikuti saluran ini.`;
+
+const DEFAULT_SETTINGS = {
+  storeName:"CHOUJI STORE",
+  heading:"DIGITAL PRODUCTS STORE",
+  subtitle:"YOUR DIGITAL NEEDS.",
+  sectionTitle:"Katalog Produk",
+  sectionDesc:"Temukan berbagai kebutuhan digital di CHOUJI STORE.",
+  footer:"YOUR DIGITAL STORE",
+  whatsapp:"6283194629621",
+  primary:"#ff2638",
+  secondary:"#a71929",
+  background:"#090a10",
+  panel:"#141620",
+  text:"#ffffff",
+  border:"#292c39",
+  logoUrl:"",
+  promoTitle:"Hubungi Owner",
+  promoText:"Butuh bantuan atau ingin melakukan pemesanan? Hubungi owner CHOUJI STORE.",
+  homeVideo:"",
+  homeWelcome:DEFAULT_WELCOME,
+  topupUrl:"https://choujistore.my.id/",
+  tiktokUrl:"https://www.tiktok.com/@duke_chouji?_r=1&_t=ZS-9B5uow7TVmm",
+  sewaWhatsappUrl:"https://wa.me/6283194629621?text=Halo%2C%20saya%20ingin%20sewa%20bot%20WhatsApp",
+  sewaChannelUrl:"https://whatsapp.com/channel/0029Vb93Imb8kyyVk2OE5n0M"
+};
+
+let products = readProducts();
+let settings = readSettings();
+let uploadedImage = "";
+
+function readProducts(){
+  try{
+    const data = JSON.parse(localStorage.getItem(PRODUCT_KEY) || "[]");
+    return Array.isArray(data) ? data : [];
+  }catch(e){return []}
+}
+
+function readSettings(){
+  try{
+    return {
+      ...DEFAULT_SETTINGS,
+      ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}")
+    };
+  }catch(e){return {...DEFAULT_SETTINGS}}
+}
+
+function saveProducts(){
+  localStorage.setItem(PRODUCT_KEY,JSON.stringify(products));
+}
+
+function saveSettings(){
+  localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings));
+}
+
+function loginAdmin(){
+  const pin = document.getElementById("pinInput").value;
+  if(pin !== ADMIN_PIN){
+    document.getElementById("loginError").textContent = "PIN salah!";
+    return;
+  }
+  document.getElementById("login").style.display="none";
+  document.getElementById("app").style.display="block";
+  renderAll();
+}
+
+document.getElementById("pinInput").addEventListener("keydown",e=>{
+  if(e.key==="Enter") loginAdmin();
+});
+
+function showSection(id,button){
+  document.querySelectorAll(".section").forEach(el=>el.classList.remove("active"));
+  document.querySelectorAll(".nav-btn").forEach(el=>el.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  if(button) button.classList.add("active");
+
+  const titles={
+    dashboard:"Dashboard",
+    products:"Manajemen Produk",
+    home:"Pengaturan Home",
+    website:"Tampilan Website",
+    backup:"Backup Data"
+  };
+  document.getElementById("pageTitle").textContent=titles[id] || "Admin";
+}
+
+function money(value){
+  return "Rp"+Number(value || 0).toLocaleString("id-ID");
+}
+
+function renderDashboard(){
+  document.getElementById("totalProducts").textContent=products.length;
+
+  const stock=products.reduce((sum,p)=>sum+Math.max(0,Number(p.stok)||0),0);
+  const value=products.reduce((sum,p)=>{
+    return sum+(Math.max(0,Number(p.stok)||0)*Math.max(0,Number(p.harga)||0));
+  },0);
+
+  document.getElementById("totalStock").textContent=stock;
+  document.getElementById("stockValue").textContent=money(value);
+}
+
+function categoryName(value){
+  const names={
+    nokos:"Nokos",
+    "sewa-bot":"Sewa Bot",
+    premium:"Premium",
+    "akun-ml":"Akun Mobile Legends",
+    "akun-ff":"Akun Free Fire",
+    lainnya:"Lainnya"
+  };
+  return names[value] || "Belum dikategorikan";
+}
+
+function renderProducts(){
+  const tbody=document.getElementById("productTable");
+  tbody.innerHTML="";
+
+  if(!products.length){
+    tbody.innerHTML='<tr><td colspan="6">Belum ada produk.</td></tr>';
+    return;
+  }
+
+  products.forEach((p,index)=>{
+    const tr=document.createElement("tr");
+
+    const img=document.createElement("img");
+    img.className="product-thumb";
+    img.alt=p.nama || "Produk";
+    img.src=p.gambar || "";
+    img.onerror=()=>{img.style.display="none"};
+
+    const imageCell=document.createElement("td");
+    imageCell.appendChild(img);
+
+    const nameCell=document.createElement("td");
+    nameCell.textContent=p.nama || "-";
+
+    const categoryCell=document.createElement("td");
+    categoryCell.textContent=categoryName(p.kategori);
+
+    const priceCell=document.createElement("td");
+    priceCell.textContent=money(p.harga);
+
+    const stockCell=document.createElement("td");
+    stockCell.textContent=Number(p.stok)||0;
+
+    const actionCell=document.createElement("td");
+    const edit=document.createElement("button");
+    edit.className="small";
+    edit.textContent="Edit";
+    edit.onclick=()=>editProduct(p.id);
+
+    const del=document.createElement("button");
+    del.className="small danger";
+    del.textContent="Hapus";
+    del.style.marginLeft="5px";
+    del.onclick=()=>deleteProduct(p.id);
+
+    actionCell.append(edit,del);
+    tr.append(imageCell,nameCell,categoryCell,priceCell,stockCell,actionCell);
+    tbody.appendChild(tr);
+  });
+}
+
+function renderAll(){
+  renderDashboard();
+  renderProducts();
+  fillHomeSettings();
+  fillWebsiteSettings();
+}
+
+function updateImageRatio(){
+  const category=document.getElementById("pCategory").value;
+  const preview=document.getElementById("imagePreview");
+  preview.classList.toggle("landscape",category==="akun-ml" || category==="akun-ff");
+}
+
+function previewUploadedImage(event){
+  const file=event.target.files && event.target.files[0];
+  if(!file) return;
+
+  if(!file.type.startsWith("image/")){
+    alert("File harus berupa gambar.");
+    event.target.value="";
+    return;
+  }
+
+  const reader=new FileReader();
+  reader.onload=()=>{
+    const img=new Image();
+    img.onload=()=>{
+      const max=1280;
+      let width=img.width;
+      let height=img.height;
+      const ratio=Math.min(1,max/Math.max(width,height));
+      width=Math.round(width*ratio);
+      height=Math.round(height*ratio);
+
+      const canvas=document.createElement("canvas");
+      canvas.width=width;
+      canvas.height=height;
+      const ctx=canvas.getContext("2d");
+      ctx.drawImage(img,0,0,width,height);
+
+      uploadedImage=canvas.toDataURL("image/jpeg",0.78);
+      const preview=document.getElementById("imagePreview");
+      preview.src=uploadedImage;
+      preview.style.display="block";
+    };
+    img.src=reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearProductForm(){
+  document.getElementById("pId").value="";
+  document.getElementById("pName").value="";
+  document.getElementById("pCategory").value="";
+  document.getElementById("pPrice").value="";
+  document.getElementById("pStock").value="";
+  document.getElementById("pImage").value="";
+  document.getElementById("pDescription").value="";
+  document.getElementById("pFile").value="";
+  document.getElementById("imagePreview").src="";
+  document.getElementById("imagePreview").style.display="none";
+  document.getElementById("formTitle").textContent="Tambah Produk";
+  uploadedImage="";
+}
+
+function saveProduct(){
+  const id=document.getElementById("pId").value;
+  const nama=document.getElementById("pName").value.trim();
+  const kategori=document.getElementById("pCategory").value;
+  const harga=Number(document.getElementById("pPrice").value);
+  const stok=Number(document.getElementById("pStock").value);
+  const deskripsi=document.getElementById("pDescription").value.trim();
+  const urlImage=document.getElementById("pImage").value.trim();
+
+  if(!nama || !kategori){
+    alert("Nama produk dan kategori wajib diisi.");
+    return;
+  }
+
+  if(!Number.isFinite(harga) || harga<0 || !Number.isFinite(stok) || stok<0){
+    alert("Harga dan stok harus berupa angka yang valid.");
+    return;
+  }
+
+  const old=products.find(p=>String(p.id)===String(id));
+  const gambar=uploadedImage || urlImage || (old ? old.gambar : "");
+
+  const product={
+    ...(old || {}),
+    id:old ? old.id : Date.now().toString(),
+    nama,
+    kategori,
+    harga,
+    stok,
+    deskripsi,
+    gambar
+  };
+
+  if(old){
+    products=products.map(p=>String(p.id)===String(id)?product:p);
+  }else{
+    products.push(product);
+  }
+
+  try{
+    saveProducts();
+    renderAll();
+    clearProductForm();
+    alert("Produk berhasil disimpan!");
+  }catch(e){
+    alert("Penyimpanan gagal. Ukuran gambar mungkin terlalu besar. Coba gunakan gambar yang lebih kecil.");
+  }
+}
+
+function editProduct(id){
+  const p=products.find(x=>String(x.id)===String(id));
+  if(!p) return;
+
+  document.getElementById("pId").value=p.id;
+  document.getElementById("pName").value=p.nama || "";
+  document.getElementById("pCategory").value=p.kategori || "lainnya";
+  document.getElementById("pPrice").value=p.harga || 0;
+  document.getElementById("pStock").value=p.stok || 0;
+  document.getElementById("pImage").value=p.gambar && !p.gambar.startsWith("data:") ? p.gambar : "";
+  document.getElementById("pDescription").value=p.deskripsi || "";
+
+  uploadedImage=p.gambar && p.gambar.startsWith("data:") ? p.gambar : "";
+
+  const preview=document.getElementById("imagePreview");
+  if(p.gambar){
+    preview.src=p.gambar;
+    preview.style.display="block";
+  }else{
+    preview.style.display="none";
+  }
+
+  document.getElementById("formTitle").textContent="Edit Produk";
+  updateImageRatio();
+  showSection("products",document.querySelectorAll(".nav-btn")[1]);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function deleteProduct(id){
+  if(!confirm("Yakin ingin menghapus produk ini?")) return;
+  products=products.filter(p=>String(p.id)!==String(id));
+  saveProducts();
+  renderAll();
+}
+
+function fillHomeSettings(){
+  document.getElementById("homeVideo").value=settings.homeVideo || "";
+  document.getElementById("homeWelcome").value=settings.homeWelcome || DEFAULT_WELCOME;
+  document.getElementById("topupUrl").value=settings.topupUrl || "";
+  document.getElementById("tiktokUrl").value=settings.tiktokUrl || "";
+  document.getElementById("sewaWhatsappUrl").value=settings.sewaWhatsappUrl || "";
+  document.getElementById("sewaChannelUrl").value=settings.sewaChannelUrl || "";
+}
+
+function saveHomeSettings(){
+  settings.homeVideo=document.getElementById("homeVideo").value.trim();
+  settings.homeWelcome=document.getElementById("homeWelcome").value;
+  settings.topupUrl=document.getElementById("topupUrl").value.trim();
+  settings.tiktokUrl=document.getElementById("tiktokUrl").value.trim();
+  settings.sewaWhatsappUrl=document.getElementById("sewaWhatsappUrl").value.trim();
+  settings.sewaChannelUrl=document.getElementById("sewaChannelUrl").value.trim();
+
+  saveSettings();
+  alert("Pengaturan Home berhasil disimpan!");
+}
+
+function fillWebsiteSettings(){
+  const fields={
+    storeName:"storeName",
+    logoUrl:"logoUrl",
+    whatsapp:"whatsapp",
+    heading:"heading",
+    subtitle:"subtitle",
+    sectionTitle:"sectionTitle",
+    sectionDesc:"sectionDesc",
+    promoTitle:"promoTitle",
+    promoText:"promoText",
+    footer:"footer",
+    primary:"primary",
+    secondary:"secondary",
+    background:"background",
+    panelColor:"panel",
+    textColor:"text",
+    borderColor:"border"
+  };
+
+  Object.entries(fields).forEach(([id,key])=>{
+    document.getElementById(id).value=settings[key] || "";
+  });
+}
+
+function saveWebsiteSettings(){
+  const fields={
+    storeName:"storeName",
+    logoUrl:"logoUrl",
+    whatsapp:"whatsapp",
+    heading:"heading",
+    subtitle:"subtitle",
+    sectionTitle:"sectionTitle",
+    sectionDesc:"sectionDesc",
+    promoTitle:"promoTitle",
+    promoText:"promoText",
+    footer:"footer",
+    primary:"primary",
+    secondary:"secondary",
+    background:"background",
+    panelColor:"panel",
+    textColor:"text",
+    borderColor:"border"
+  };
+
+  Object.entries(fields).forEach(([id,key])=>{
+    settings[key]=document.getElementById(id).value.trim();
+  });
+
+  saveSettings();
+  alert("Tampilan website berhasil disimpan!");
+}
+
+function backupData(){
+  const backup={
+    version:2,
+    createdAt:new Date().toISOString(),
+    products:products,
+    settings:settings
+  };
+
+  const blob=new Blob([JSON.stringify(backup,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download="chouji-store-backup.json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function restoreData(event){
+  const file=event.target.files && event.target.files[0];
+  if(!file) return;
+
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const data=JSON.parse(reader.result);
+      if(!Array.isArray(data.products) || !data.settings || typeof data.settings!=="object"){
+        throw new Error("Format backup tidak sesuai.");
+      }
+
+      if(!confirm("Pulihkan backup? Data produk dan pengaturan saat ini akan diganti.")) return;
+
+      products=data.products;
+      settings={...DEFAULT_SETTINGS,...data.settings};
+
+      saveProducts();
+      saveSettings();
+      renderAll();
+      alert("Backup berhasil dipulihkan!");
+    }catch(e){
+      alert("File backup tidak valid atau rusak.");
+    }finally{
+      event.target.value="";
+    }
+  };
+  reader.readAsText(file);
+}
+
+renderAll();
+</script>
+
+</body>
+</html>

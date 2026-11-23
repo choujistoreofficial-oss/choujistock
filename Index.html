@@ -1,0 +1,814 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHOUJI STORE</title>
+
+<style>
+:root{
+ --red:#ff2638;
+ --dark:#08090d;
+ --panel:#141620;
+ --text:#fff;
+ --border:#292c39;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+ margin:0;color:var(--text);
+ background:
+ radial-gradient(circle at 85% 10%,#48101d 0,transparent 28%),
+ radial-gradient(circle at 5% 50%,#21101a 0,transparent 30%),
+ var(--dark);
+ font-family:Arial,sans-serif;
+}
+body:before{
+ content:"";position:fixed;inset:0;
+ pointer-events:none;opacity:.1;
+ background-image:
+ linear-gradient(#fff1 1px,transparent 1px),
+ linear-gradient(90deg,#fff1 1px,transparent 1px);
+ background-size:40px 40px;
+}
+a{text-decoration:none;color:inherit}
+button,input,select{font:inherit}
+.container{width:92%;max-width:1150px;margin:auto}
+
+/* NAVBAR */
+nav{
+ position:sticky;top:10px;z-index:20;
+ width:92%;max-width:1150px;margin:10px auto;
+ padding:13px 17px;
+ display:flex;align-items:center;
+ justify-content:space-between;gap:12px;
+ border:1px solid #ffffff25;
+ border-radius:17px;
+ background:#11131be8;
+ backdrop-filter:blur(18px);
+}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900}
+.logo{
+ width:40px;height:40px;border-radius:12px;
+ background:linear-gradient(135deg,#ff4052,#800013);
+ display:grid;place-items:center;
+ overflow:hidden;
+}
+.logo img{width:100%;height:100%;object-fit:cover}
+.links{display:flex;gap:20px;font-size:13px;color:#bbb}
+.links a:hover{color:var(--red)}
+.navbtn,.buy{
+ display:inline-block;border:0;
+ background:linear-gradient(135deg,#ff3549,#a50018);
+ color:white;padding:12px 17px;
+ border-radius:11px;font-weight:bold;
+ cursor:pointer;
+}
+.category-nav{
+ display:flex;gap:9px;overflow-x:auto;
+ padding:5px 0 15px;
+ scrollbar-width:thin;
+}
+.category-nav a{
+ flex:0 0 auto;
+ padding:10px 14px;
+ border:1px solid #ffffff22;
+ border-radius:30px;
+ background:#141620;
+ color:#bbb;font-size:12px;
+}
+.category-nav a:hover,
+.category-nav a.active{
+ color:white;background:#741728;
+ border-color:var(--red);
+}
+
+/* HERO */
+.hero{
+ display:grid;grid-template-columns:1.1fr .9fr;
+ gap:35px;align-items:center;
+ padding:65px 0 45px;min-height:490px;
+}
+.tag{
+ display:inline-block;padding:9px 14px;
+ border:1px solid #ff52634a;
+ border-radius:30px;background:#ff263815;
+ color:#ff8791;font-size:11px;
+ font-weight:bold;letter-spacing:2px;
+}
+h1{
+ font-size:clamp(40px,6vw,72px);
+ line-height:1.05;letter-spacing:-3px;
+ margin:22px 0;font-weight:950;
+}
+h1 span{color:var(--red);text-shadow:0 0 30px #ff263855}
+.hero p{color:#aaaebb;line-height:1.8;font-size:15px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}
+.outline{
+ padding:12px 17px;border:1px solid #ffffff35;
+ border-radius:11px;font-weight:bold;
+}
+.visual{
+ height:350px;position:relative;overflow:hidden;
+ border:1px solid #ffffff25;border-radius:25px;
+ background:linear-gradient(145deg,#42101d,#17131d 60%,#08090d);
+ display:grid;place-items:center;
+}
+.visual:before{
+ content:"";position:absolute;width:250px;height:250px;
+ background:#ff2638;filter:blur(100px);opacity:.3;
+}
+.visual-inner{
+ position:absolute;inset:17px;
+ border:1px solid #ffffff20;border-radius:19px;
+ padding:20px;display:flex;flex-direction:column;
+ justify-content:space-between;
+}
+.visual-top,.visual-bottom{
+ display:flex;justify-content:space-between;
+ color:#bbb;font-size:11px;letter-spacing:1px;
+}
+.emblem{
+ width:160px;height:160px;border-radius:35px;
+ transform:rotate(-7deg);
+ background:linear-gradient(145deg,#ff4053,#720014);
+ display:grid;place-items:center;
+ font-size:70px;font-weight:1000;
+ box-shadow:0 0 65px #ff263855;
+ margin:auto;overflow:hidden;
+}
+.emblem img{width:100%;height:100%;object-fit:cover}
+.visual-bottom strong{font-size:19px;color:white}
+
+/* VIDEO */
+.video-section{padding:15px 0 35px}
+.video-box{
+ border:1px solid #ffffff25;
+ border-radius:18px;overflow:hidden;
+ background:#11131b;
+}
+.video-box video,.video-box iframe{
+ width:100%;aspect-ratio:16/9;
+ display:block;border:0;
+}
+.video-placeholder{
+ aspect-ratio:16/9;display:grid;
+ place-items:center;color:#999;
+ background:#11131b;
+}
+
+/* WELCOME */
+.welcome{
+ padding:22px;margin:10px 0 55px;
+ border:1px solid #ffffff20;
+ border-radius:18px;background:var(--panel);
+}
+.welcome h2{font-size:22px;margin:0 0 15px}
+.welcome-content{
+ color:#c5c6cf;font-size:13px;
+ line-height:1.9;overflow-wrap:anywhere;
+ white-space:pre-wrap;
+}
+.welcome-content a{color:#ff8791;text-decoration:underline}
+
+/* STATS */
+.stats{
+ display:grid;grid-template-columns:repeat(3,1fr);
+ gap:14px;margin:0 0 65px;
+}
+.stat{
+ padding:20px;border:1px solid #ffffff18;
+ border-radius:17px;
+ background:linear-gradient(145deg,#191b26,#101117);
+}
+.stat b{font-size:22px;display:block;margin-bottom:7px}
+.stat small{color:#999eae}
+
+/* PRODUK */
+.section{padding:20px 0 70px}
+.section-head{
+ display:flex;justify-content:space-between;
+ align-items:end;gap:20px;margin-bottom:25px;
+}
+.kicker{color:#ff6977;font-size:11px;font-weight:bold;letter-spacing:2px}
+h2{font-size:35px;margin:9px 0}
+.section-head p{color:#999eae;font-size:13px;line-height:1.7;max-width:420px}
+.toolbar{display:flex;gap:12px;margin-bottom:15px}
+.search,.sort{
+ padding:14px;border-radius:12px;
+ border:1px solid #303340;
+ background:#141620;color:white;
+}
+.search{flex:1;min-width:0;outline:none}
+.products{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}
+.product{
+ overflow:hidden;border:1px solid #ffffff19;
+ border-radius:19px;
+ background:linear-gradient(145deg,#191b26,#101117);
+ transition:.25s;
+}
+.product:hover{
+ transform:translateY(-5px);
+ border-color:#ff526377;
+}
+.product-img{
+ width:100%;aspect-ratio:1/1;
+ background:radial-gradient(circle,#741728,#171019 70%);
+ display:grid;place-items:center;overflow:hidden;
+}
+.product-img.landscape{aspect-ratio:16/9}
+.product-img img{width:100%;height:100%;object-fit:cover}
+.placeholder{font-size:55px}
+.product-body{padding:17px}
+.product-top{
+ display:flex;justify-content:space-between;
+ gap:10px;align-items:center;
+}
+.product h3{font-size:17px;margin:0}
+.stock{
+ font-size:10px;color:#ff8791;
+ background:#ff263819;padding:6px 9px;
+ border-radius:20px;white-space:nowrap;
+}
+.category-label{
+ display:inline-block;margin-top:10px;
+ color:#ff8791;font-size:10px;
+ background:#ff263815;padding:5px 8px;
+ border-radius:20px;
+}
+.desc{color:#a0a3b1;font-size:12px;line-height:1.6;min-height:38px}
+.price{font-size:20px;font-weight:900;margin:15px 0}
+.product .buy{width:100%;text-align:center}
+.empty{
+ grid-column:1/-1;text-align:center;
+ padding:45px;border:1px dashed #454854;
+ border-radius:16px;color:#999;
+}
+
+/* PROMO & FOOTER */
+.promo{
+ padding:30px;margin-bottom:65px;
+ border:1px solid #ff26384a;border-radius:22px;
+ background:linear-gradient(110deg,#3d0d18,#17131c);
+ display:flex;justify-content:space-between;
+ align-items:center;gap:20px;
+}
+.promo h2{font-size:27px;margin:8px 0}
+.promo p{color:#c2aeb3;font-size:13px;line-height:1.7}
+footer{
+ border-top:1px solid #ffffff18;
+ padding:28px 0 40px;color:#888;
+ display:flex;justify-content:space-between;
+ gap:15px;font-size:12px;
+}
+@media(max-width:800px){
+ .hero{grid-template-columns:1fr;padding-top:40px}
+ .products{grid-template-columns:repeat(2,1fr)}
+ .links{display:none}
+}
+@media(max-width:520px){
+ .hero{padding-top:30px}
+ .visual{height:280px}
+ .emblem{width:130px;height:130px;font-size:55px}
+ .stats{gap:8px}
+ .stat{padding:13px 9px}
+ .stat b{font-size:17px}
+ .stat small{font-size:10px}
+ .products{grid-template-columns:1fr}
+ .section-head{display:block}
+ .promo{display:block}
+ .promo .buy{margin-top:12px}
+ footer{display:block;line-height:2}
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+ <a class="brand" href="#home">
+  <span class="logo" id="navLogo">C</span>
+  <span id="navName">CHOUJI STORE</span>
+ </a>
+ <div class="links">
+  <a href="#home">Home</a>
+  <a href="#produk">Produk</a>
+  <a href="#promo">Hubungi Owner</a>
+ </div>
+ <a class="navbtn" href="#produk">Belanja ↗</a>
+</nav>
+
+<main class="container">
+
+<!-- KATEGORI -->
+<div class="category-nav" id="categoryNav">
+ <a href="#home" data-category="home" class="active">Home</a>
+ <a href="#produk" data-category="nokos">Nokos</a>
+ <a href="#produk" data-category="sewa-bot">Sewa Bot</a>
+ <a href="#produk" data-category="premium">Premium</a>
+ <a href="#produk" data-category="akun-ml">Akun Mobile Legends</a>
+ <a href="#produk" data-category="akun-ff">Akun Free Fire</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+ <div>
+  <div class="tag" id="heroTag">✦ DIGITAL PRODUCTS STORE</div>
+  <h1 id="heroTitle">DIGITAL PRODUCTS<br><span>STORE.</span></h1>
+  <p id="heroDesc">YOUR DIGITAL NEEDS.</p>
+  <div class="hero-actions">
+   <a class="navbtn" href="#produk">Jelajahi Produk ↗</a>
+   <a class="outline" href="#promo">Hubungi Owner</a>
+  </div>
+ </div>
+
+ <div class="visual">
+  <div class="visual-inner">
+   <div class="visual-top">
+    <span>CHOUJI / DIGITAL GOODS</span>
+    <span>EST. 2026</span>
+   </div>
+   <div class="emblem" id="heroLogo">C</div>
+   <div class="visual-bottom">
+    <strong id="visualName">CHOUJI STORE</strong>
+    <span>DIGITAL STORE</span>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- VIDEO -->
+<section class="video-section" id="videoSection" style="display:none">
+ <div class="video-box" id="videoBox"></div>
+</section>
+
+<!-- SAMBUTAN -->
+<section class="welcome">
+ <h2>✨ Informasi Chouji Store</h2>
+ <div class="welcome-content" id="welcomeContent"></div>
+</section>
+
+<!-- STATISTIK -->
+<div class="stats">
+ <div class="stat">
+  <b id="statProducts">0 Produk</b>
+  <small>Produk digital tersedia</small>
+ </div>
+ <div class="stat">
+  <b>⚡ Praktis</b>
+  <small>Pemesanan mudah dan cepat</small>
+ </div>
+ <div class="stat">
+  <b>📦 Digital</b>
+  <small>Berbagai kebutuhan digital</small>
+ </div>
+</div>
+
+<!-- KATALOG -->
+<section class="section" id="produk">
+ <div class="section-head">
+  <div>
+   <div class="kicker">DIGITAL PRODUCTS</div>
+   <h2 id="sectionTitle">Katalog Produk.</h2>
+  </div>
+  <p id="sectionDesc">Temukan berbagai kebutuhan digital di CHOUJI STORE.</p>
+ </div>
+
+ <div class="toolbar">
+  <input class="search" id="search" placeholder="Cari produk...">
+  <select class="sort" id="sort">
+   <option value="default">Urutkan</option>
+   <option value="low">Harga termurah</option>
+   <option value="high">Harga tertinggi</option>
+  </select>
+ </div>
+
+ <div class="products" id="productList"></div>
+</section>
+
+<!-- HUBUNGI OWNER -->
+<section class="promo" id="promo">
+ <div>
+  <div class="kicker">NEED HELP?</div>
+  <h2 id="promoTitle">Hubungi Owner</h2>
+  <p id="promoText">Ada pertanyaan atau ingin memesan produk? Hubungi owner CHOUJI STORE.</p>
+ </div>
+ <a class="buy" id="contactBtn" href="https://wa.me/6283194629621" target="_blank" rel="noopener">Hubungi Owner ↗</a>
+</section>
+
+</main>
+
+<footer class="container">
+ <span id="footerText">YOUR DIGITAL STORE</span>
+ <span>CHOUJI STORE 🔴</span>
+</footer>
+
+<script>
+const PRODUCT_KEY="chouji_produk";
+const SETTINGS_KEY="chouji_settings";
+
+const defaults={
+ storeName:"CHOUJI STORE",
+ heading:"DIGITAL PRODUCTS STORE",
+ subtitle:"YOUR DIGITAL NEEDS.",
+ sectionTitle:"Katalog Produk.",
+ sectionDesc:"Temukan berbagai kebutuhan digital di CHOUJI STORE.",
+ footer:"YOUR DIGITAL STORE",
+ whatsapp:"6283194629621",
+ primary:"#ff2638",
+ secondary:"#a71929",
+ background:"#08090d",
+ panel:"#141620",
+ text:"#ffffff",
+ border:"#292c39",
+ logoUrl:"",
+ promoTitle:"Hubungi Owner",
+ promoText:"Ada pertanyaan atau ingin memesan produk? Hubungi owner CHOUJI STORE.",
+ homeVideo:"",
+ homeWelcome:"",
+ topupUrl:"https://choujistore.my.id/",
+ tiktokUrl:"https://www.tiktok.com/@duke_chouji?_r=1&_t=ZS-9B5uow7TVmm",
+ sewaWhatsappUrl:"https://wa.me/6283194629621?text=Halo%2C%20saya%20ingin%20sewa%20bot%20WhatsApp",
+ sewaChannelUrl:"https://whatsapp.com/channel/0029Vb93Imb8kyyVk2OE5n0M"
+};
+
+let activeCategory="all";
+
+function getSettings(){
+ try{
+  return {
+   ...defaults,
+   ...JSON.parse(localStorage.getItem(SETTINGS_KEY)||"{}")
+  };
+ }catch(e){
+  return {...defaults};
+ }
+}
+
+function getProducts(){
+ try{
+  const data=JSON.parse(localStorage.getItem(PRODUCT_KEY)||"[]");
+  return Array.isArray(data)?data:[];
+ }catch(e){
+  return [];
+ }
+}
+
+function money(value){
+ return "Rp"+Number(value||0).toLocaleString("id-ID");
+}
+
+function categoryName(value){
+ const names={
+  nokos:"Nokos",
+  "sewa-bot":"Sewa Bot",
+  premium:"Premium",
+  "akun-ml":"Akun Mobile Legends",
+  "akun-ff":"Akun Free Fire",
+  lainnya:"Lainnya"
+ };
+ return names[value]||"Produk Digital";
+}
+
+function safeUrl(value){
+ try{
+  const url=new URL(value);
+  if(url.protocol==="https:" || url.protocol==="http:") return url.href;
+ }catch(e){}
+ return "";
+}
+
+/* LINKIFY TEKS SAMBUTAN */
+function renderWelcome(settings){
+ const box=document.getElementById("welcomeContent");
+ box.textContent="";
+
+ const text=settings.homeWelcome || 
+  "✨ Selamat datang di Chouji Store ✨\n\nSilakan hubungi owner untuk informasi dan pemesanan produk.";
+
+ const lines=text.split("\n");
+
+ lines.forEach((line,index)=>{
+  const regex=/(https?:\/\/[^\s]+)/g;
+  let last=0;
+  let match;
+
+  while((match=regex.exec(line))!==null){
+   box.appendChild(document.createTextNode(line.slice(last,match.index)));
+
+   const link=document.createElement("a");
+   const url=safeUrl(match[0].replace(/[.,]+$/,""));
+
+   if(url){
+    link.href=url;
+    link.target="_blank";
+    link.rel="noopener";
+    link.textContent=match[0];
+    box.appendChild(link);
+   }else{
+    box.appendChild(document.createTextNode(match[0]));
+   }
+   last=match.index+match[0].length;
+  }
+
+  box.appendChild(document.createTextNode(line.slice(last)));
+
+  if(index<lines.length-1){
+   box.appendChild(document.createElement("br"));
+  }
+ });
+}
+
+/* VIDEO HOME */
+function renderVideo(settings){
+ const section=document.getElementById("videoSection");
+ const box=document.getElementById("videoBox");
+ const url=safeUrl(settings.homeVideo||"");
+
+ box.innerHTML="";
+
+ if(!url){
+  section.style.display="none";
+  return;
+ }
+
+ section.style.display="block";
+
+ let youtubeId="";
+
+ try{
+  const parsed=new URL(url);
+
+  if(parsed.hostname.includes("youtube.com")){
+   youtubeId=parsed.searchParams.get("v")||"";
+   if(parsed.pathname.startsWith("/embed/")){
+    youtubeId=parsed.pathname.split("/embed/")[1].split("/")[0];
+   }
+  }else if(parsed.hostname==="youtu.be"){
+   youtubeId=parsed.pathname.replace("/","");
+  }
+ }catch(e){}
+
+ if(youtubeId){
+  const iframe=document.createElement("iframe");
+  iframe.src="https://www.youtube-nocookie.com/embed/"+encodeURIComponent(youtubeId);
+  iframe.title="Video CHOUJI STORE";
+  iframe.allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+  iframe.allowFullscreen=true;
+  box.appendChild(iframe);
+ }else if(/\.(mp4|webm|ogg)(\?.*)?$/i.test(url)){
+  const video=document.createElement("video");
+  video.src=url;
+  video.controls=true;
+  video.playsInline=true;
+  video.preload="metadata";
+  box.appendChild(video);
+ }else{
+  const link=document.createElement("a");
+  link.href=url;
+  link.target="_blank";
+  link.rel="noopener";
+  link.textContent="▶ Tonton video CHOUJI STORE";
+  link.className="video-placeholder";
+  box.appendChild(link);
+ }
+}
+
+/* LOGO */
+function renderLogo(settings){
+ const navLogo=document.getElementById("navLogo");
+ const heroLogo=document.getElementById("heroLogo");
+
+ navLogo.textContent="C";
+ heroLogo.textContent="C";
+
+ const url=safeUrl(settings.logoUrl||"");
+ if(!url) return;
+
+ const navImg=document.createElement("img");
+ navImg.src=url;
+ navImg.alt="Logo";
+ navLogo.textContent="";
+ navLogo.appendChild(navImg);
+
+ const heroImg=document.createElement("img");
+ heroImg.src=url;
+ heroImg.alt="Logo CHOUJI STORE";
+ heroLogo.textContent="";
+ heroLogo.appendChild(heroImg);
+}
+
+/* KATEGORI */
+function setCategory(category){
+ activeCategory=category;
+
+ document.querySelectorAll("#categoryNav a").forEach(link=>{
+  link.classList.toggle("active",link.dataset.category===category);
+ });
+
+ if(category!=="home"){
+  document.getElementById("produk").scrollIntoView({behavior:"smooth"});
+ }else{
+  document.getElementById("home").scrollIntoView({behavior:"smooth"});
+ }
+
+ renderProducts();
+}
+
+document.querySelectorAll("#categoryNav a").forEach(link=>{
+ link.addEventListener("click",event=>{
+  event.preventDefault();
+  setCategory(link.dataset.category);
+ });
+});
+
+/* KARTU PRODUK */
+function createProductCard(product,settings){
+ const card=document.createElement("article");
+ card.className="product";
+
+ const imageBox=document.createElement("div");
+ imageBox.className="product-img";
+
+ if(product.kategori==="akun-ml" || product.kategori==="akun-ff"){
+  imageBox.classList.add("landscape");
+ }
+
+ if(product.gambar){
+  const img=document.createElement("img");
+  img.src=product.gambar;
+  img.alt=product.nama||"Produk";
+  img.loading="lazy";
+  img.onerror=()=>{
+   imageBox.innerHTML='<div class="placeholder">📦</div>';
+  };
+  imageBox.appendChild(img);
+ }else{
+  const placeholder=document.createElement("div");
+  placeholder.className="placeholder";
+  placeholder.textContent="📦";
+  imageBox.appendChild(placeholder);
+ }
+
+ const body=document.createElement("div");
+ body.className="product-body";
+
+ const top=document.createElement("div");
+ top.className="product-top";
+
+ const title=document.createElement("h3");
+ title.textContent=product.nama||"Produk Digital";
+
+ const stock=document.createElement("span");
+ stock.className="stock";
+ stock.textContent="Stok: "+(Number(product.stok)||0);
+
+ top.append(title,stock);
+
+ const category=document.createElement("span");
+ category.className="category-label";
+ category.textContent=categoryName(product.kategori);
+
+ const desc=document.createElement("p");
+ desc.className="desc";
+ desc.textContent=product.deskripsi||"Produk digital pilihan.";
+
+ const price=document.createElement("div");
+ price.className="price";
+ price.textContent=money(product.harga);
+
+ const button=document.createElement("a");
+ button.className="buy";
+ button.target="_blank";
+ button.rel="noopener";
+ button.textContent="Pesan via WhatsApp ↗";
+
+ const number=(settings.whatsapp||defaults.whatsapp).replace(/\D/g,"");
+ const message=
+  "Halo owner "+settings.storeName+", saya ingin membeli:\n"+
+  "Produk: "+(product.nama||"Produk")+"\n"+
+  "Harga: "+money(product.harga)+"\n\n"+
+  "Apakah masih tersedia?";
+
+ button.href="https://wa.me/"+number+"?text="+encodeURIComponent(message);
+
+ if(Number(product.stok)<=0){
+  button.textContent="Stok Habis";
+  button.style.opacity=".45";
+  button.style.pointerEvents="none";
+ }
+
+ body.append(top,category,desc,price,button);
+ card.append(imageBox,body);
+
+ return card;
+}
+
+/* RENDER PRODUK */
+function renderProducts(){
+ const settings=getSettings();
+ const items=getProducts();
+ const query=document.getElementById("search").value.toLowerCase().trim();
+ const sort=document.getElementById("sort").value;
+
+ let filtered=items.filter(product=>{
+  const name=(product.nama||"").toLowerCase();
+  const description=(product.deskripsi||"").toLowerCase();
+
+  const matchSearch=name.includes(query)||description.includes(query);
+  const matchCategory=activeCategory==="all" ||
+   activeCategory==="home" ||
+   product.kategori===activeCategory;
+
+  return matchSearch && matchCategory;
+ });
+
+ if(sort==="low"){
+  filtered.sort((a,b)=>Number(a.harga)-Number(b.harga));
+ }
+ if(sort==="high"){
+  filtered.sort((a,b)=>Number(b.harga)-Number(a.harga));
+ }
+
+ const list=document.getElementById("productList");
+ list.innerHTML="";
+
+ if(filtered.length===0){
+  const empty=document.createElement("div");
+  empty.className="empty";
+  empty.textContent="Belum ada produk pada kategori ini.";
+  list.appendChild(empty);
+  return;
+ }
+
+ filtered.forEach(product=>{
+  list.appendChild(createProductCard(product,settings));
+ });
+}
+
+/* RENDER WEBSITE */
+function render(){
+ const settings=getSettings();
+ const products=getProducts();
+
+ document.documentElement.style.setProperty("--red",settings.primary);
+ document.documentElement.style.setProperty("--dark",settings.background);
+ document.documentElement.style.setProperty("--panel",settings.panel);
+ document.documentElement.style.setProperty("--text",settings.text);
+ document.documentElement.style.setProperty("--border",settings.border);
+
+ document.title=settings.storeName||"CHOUJI STORE";
+
+ document.getElementById("navName").textContent=settings.storeName;
+ document.getElementById("visualName").textContent=settings.storeName;
+
+ document.getElementById("heroTag").textContent="✦ DIGITAL PRODUCTS STORE";
+ document.getElementById("heroDesc").textContent=settings.subtitle;
+ document.getElementById("sectionTitle").textContent=settings.sectionTitle;
+ document.getElementById("sectionDesc").textContent=settings.sectionDesc;
+ document.getElementById("promoTitle").textContent=settings.promoTitle||"Hubungi Owner";
+ document.getElementById("promoText").textContent=settings.promoText;
+ document.getElementById("footerText").textContent=settings.footer;
+
+ const heading=(settings.heading||defaults.heading).trim();
+ const words=heading.split(/\s+/);
+ const first=words.slice(0,-1).join(" ");
+ const last=words.slice(-1).join("");
+
+ const heroTitle=document.getElementById("heroTitle");
+ heroTitle.textContent="";
+
+ heroTitle.appendChild(document.createTextNode(first+" "));
+ const span=document.createElement("span");
+ span.textContent=last;
+ heroTitle.appendChild(span);
+
+ const number=(settings.whatsapp||defaults.whatsapp).replace(/\D/g,"");
+ document.getElementById("contactBtn").href="https://wa.me/"+number;
+
+ document.getElementById("statProducts").textContent=products.length+" Produk";
+
+ renderLogo(settings);
+ renderVideo(settings);
+ renderWelcome(settings);
+ renderProducts();
+}
+
+/* EVENT */
+document.getElementById("search").addEventListener("input",renderProducts);
+document.getElementById("sort").addEventListener("change",renderProducts);
+
+window.addEventListener("storage",event=>{
+ if(event.key===PRODUCT_KEY || event.key===SETTINGS_KEY){
+  render();
+ }
+});
+
+window.addEventListener("pageshow",render);
+
+render();
+</script>
+
+</body>
+</html>
